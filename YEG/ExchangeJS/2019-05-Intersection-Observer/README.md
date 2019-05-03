@@ -67,3 +67,5 @@ Demos:
     * Great introduction resource in understanding what are good timing values to plan animations in UX design
 
 # Libraries Used
+* [highlight.js](https://highlightjs.org/)
+* [Dracula Theme for highlight.js](https://draculatheme.com/highlightjs/)
