@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <!--  Meta -->
+  <meta charset="UTF-8" />
+  <title>Performance Gains and Lazyloading with the IntersectionObservable API</title>
+  
+  <!--  Styles  -->
+  <link rel="stylesheet" href="styles/index.processed.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/dracula.min.css">
+</head>
+<body>
+  <div class="section title">
+      <h1>Performance Gains and Lazyloading with the IntersectionObservable API</h1>
+      <div class="subtitle">Exchange JS Lightning Talk by Daniel Phan - 2019</div>
+  </div>
+  
+  <div class="section">
+    <div class="flex-container">
+      <div class="column-50">
+        <h3>Lazy Loading? What am I trying to solve?</h3>
+        <ul>
+        <li>Have an expensive resource on the page that is currently loading on page load (e.g. video file, high quality image, or slow JS code)</li>
+        </ul>
+        <h3>What is the Intersection Observer?</h3>
+        <ul>
+          <li>VanillaJS API that can be attached to a target `div` of interest to tell you it is currently `viewable`</li>
+          <li>The calculations are a rectangle around the target element</li>
+          <li>It is not pixel perfect, but it is an approximiation of N threshold to determine if you are intersecting the object</li>
+          <li>Can be used for lazy loading, or an indicator to trigger animations via Javascript</li>
+        </ul>
+      </div>
+      <div class="column-50">
+        <h4>Example Setup</h4>
+        <pre>
+          <code class="javascript">
+  const myObserver = new IntersectionObserver(myCallback, myOptions);
+
+  const myTarget = document.getElementById('myTargetId');
+  myObserver.observe(myTarget);
+          </code>
+        </pre>
+        <h4 class="code-title">Preconditions</h4>
+        <pre>
+          <code class="javascript">
+  const myOptions = {
+      root: document.getElementById('myCustomViewportElement'), // Target element to be used as your view portdefault is browser viewport if set to null.
+      rootMargin: '0px', // Same as css margin property. e.g. 'top right bottom left' in your favourite dimensions
+      threshold: 1.0 // 0 - 1. e.g. 0.5 is 50% viewable. Can be an array of values.
+  }
+           </code>
+        </pre>
+        <h4 class="code-title">myCallback Setup</h4>
+        <pre>
+          <code class="javascript">
+  const myCallback = function(entries, observer) { 
+    entries.forEach(entry => {
+      // Each entry describes an intersection change for one observed
+      // target element:
+      //   entry.boundingClientRect
+      //   entry.intersectionRatio
+      //   entry.intersectionRect
+      //   entry.isIntersecting
+      //   entry.rootBounds
+      //   entry.target
+      //   entry.time
+      
+      if (entry.isIntersecting) {
+        // Lazy loading logic here!
+        // ...
+        // ...
+        myObserver.unobserve(myTarget);
+        
+      }
+    });
+  }; 
+          </code>
+        </pre>  
+      </div>
+    </div>
+  </div>
+  
+   <div class="section">
+    <div class="flex-container">
+      <div class="column-50">
+        <h3>Intersection Observer in Action</h3>
+        <div class="observer-container">
+          <div id="target-1" class="observer-target">
+             0 - 50% Viewable. Target = Purple.
+          </div>
+        </div>
+      </div>
+      <div class="column-50">
+        <h4 class="code-title">Example HTML Structure</h4>
+        <pre>
+          <code class="html">
+&lt;div class="observer-container"&gt;
+  &lt;div id="target-1" class="observer-target"&gt;&lt;/div&gt;
+&lt;/div&gt;      
+          </code>
+        </pre>
+        <h4 class="code-title">modifyTarget Callback</h4>
+        <pre>
+          <code class="javascript">
+const modifyTarget = function(entries) { 
+    entries.forEach(entry => { 
+      if (0 <= entry.intersectionRatio && entry.intersectionRatio < 0.5) {
+        example1.style.backgroundColor = 'purple';
+        example1.innerText = '0 - 50% Viewable. Target = Purple.';
+      }
+      
+      if (0.5 <= entry.intersectionRatio && entry.intersectionRatio <= 0.75) {
+        example1.style.backgroundColor = 'green';
+        example1.innerText = '50 - 75% Viewable. Target = Green.';
+      }
+      if (0.75 < entry.intersectionRatio && entry.intersectionRatio <= 1) {
+        example1.style.backgroundColor = 'red';
+        example1.innerText = '75 - 100% Viewable. Target = Red.';
+      }
+    });
+};      
+          </code>
+        </pre>
+        <h4>Considerations for Lazy Loading</h4>
+        <ul>
+          <li>Instead of loading the expensive resource on page load, trigger the loading when the object is viewable (or close to viewable)</li>
+          <li>Use the margin field to trigger the callback before the element is viewable for seamless UX</li>
+          <li>Gotcha: You'll need to handle any browser reflow issues prior to the resource being loaded on the page. e.g. have a placeholder space in place of the element of interest</li>
+        </ul>  
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="flex-container">
+    <div class="column-50">
+      <h3>Other Lazy Loading Solutions Today</h3>
+      <ul>
+        <p>Some lazy loading JS libraries avaliable to use today</p>
+        <li>[jquery.lazy](https://github.com/eisbehr-/jquery.lazy)</li>
+        <li>[lazysizes](https://github.com/aFarkas/lazysizes)</li>
+        <li>[lazyload](https://github.com/verlok/lazyload)</li>
+      </ul>
+    </div>
+    
+    <div class="column-50">
+      <h4>IE 11 Lazy Loaded Property</h4>
+         <pre>
+          <code class="html">
+&lt;img src="example.jpg" lazyload="1"/&gt;    
+          </code>
+        </pre>
+      <ul>
+        <li>Priority is inheritly built into browser on which order the resources are loaded</li>
+        <li>0 - default priority loading</li>
+        <li>1 - load resource after higher priority loading</li>
+      </ul>  
+    </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div>
+      <h3>Lazy Loading Solutions Tomorrow</h3>
+      <ul>
+        <li>Chrome 75 tentatively is expected to support the "loading" attribute.</li>
+        <li>lazy - the resource will be requested when viewable</li>
+    <li>eager - the resource will be loaded immediately</li>
+     <li>auto - the browser will determine if a resource should be lazy loaded or not (default value if unspecified)</li>
+        <li>Safari 12 Webkit will support intersection Observer</li>
+      </ul>
+    </div>
+  </div>
+  <div class="section">
+    <div>
+      <h3>References</h3>
+      <ul>
+        <li>[Intersection Observer API MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)</li>
+        <li>[Network prioritization in IE11](https://msdn.microsoft.com/en-ca/vstudio/dn265036(v=vs.90))</li>
+        <li>[A native lazy load for the Web platform](https://calibreapp.com/blog/native-lazy-load/)</li>
+        <li>[Lazyload images and iframes Github Issue](https://github.com/whatwg/html/pull/3752)</li>
+        <li>[IntersectionObserver in WebKit](https://webkit.org/blog/8582/intersectionobserver-in-webkit/)</li>
+       </ul> 
+      <h3>Additional Readings</h3>
+      <ul>
+        <li>[Lazy Loading Images and Video](https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/)</li>
+        Great all in one summary introduction article into lazy loading and performance. Also provides great example snippets on how to use the Intersection Observer API
+        
+        <li>[Resource Prioritization – Getting the Browser to Help You](https://developers.google.com/web/fundamentals/performance/resource-prioritization)</li>
+        Great resource into preload, prefetch, preconnect when you're optimizing resource loading in the browser
+        <li>[The ultimate guide to proper use of animation in UX](https://uxdesign.cc/the-ultimate-guide-to-proper-use-of-animation-in-ux-10bd98614fa9)</li>
+        Great introduction resource in understanding what are good timing values to plan animations in UX design
+      </ul>
+    </div>
+  </div>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+  <script src="scripts/index.js"></script>
+  <script src="scripts/example1.js"></script>
+</body>
+</html>

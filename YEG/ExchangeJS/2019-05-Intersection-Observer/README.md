@@ -12,16 +12,18 @@
 
 Demos:
 1. Intersection Observer in a black box (a visual demo)
-2. Intersection Observer to trigger resource loading (visual and developer tool demo)
 
-* Built in VanillaJS API that is bound to a target element in the DOM. This API fires when you are "viewing" the target element, executing the callback function assigned to the IntersectionObserver object bound to the element.
-    * Configurable fields to assist you:
+* Built in VanillaJS API that is bound to a target ancestor to your observed element in the DOM. The API fires when you are "viewing" the target element, executing the callback function assigned to the IntersectionObserver object. You pass the target element to the observer.
+    * Basic configurable fields to assist you:
+        * root - default is the viewport 
+            * if overflow is occuring on the root, then it's the length of the content
+            * if set then it's the bounding rectangle of the ancestor element to the target element
         * margin around the target element (same as the CSS property margin). Allows you to fire before the element is "technically" viewable if you have timing issues.
         * threshold (array of numbers from 0 to 1 as a floating point values) at what approximate threshold(s) should we fire the callback
             * 0 = first pixel of our target element is viewable
             * 0.5 ~= half the pixels of our target element is viewable
             * 1 = all pixels are within the viewable screen
-* The calculations are a rectangle around the target element. (Think the `getBoundingClientRect()`). 
+* The calculations are a rectangle around the target element. 
 * It is not pixel perfect, but it is an approximiation of N threshold to determine if you are intersecting the object.
 
 

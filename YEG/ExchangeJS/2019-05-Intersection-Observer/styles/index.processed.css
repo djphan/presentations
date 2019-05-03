@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  font-family: 'Lato', sans-serif;
+}
+
+.section {
+  display: block;
+}
+
+.section:after {
+  content: "";
+  height: 20vh;
+  background-color: #282a36;
+  display: block;
+}
+
+.section > div,
+.section h1,
+.section ul {
+  padding: 5vh 1vw;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.column-50 {
+  flex: 0 0 50%;
+  max-width: calc(50% - 1vw);
+}
+
+.observer-container {
+  height: 50em;
+  width: calc(100% - 5vw);
+  border: #282a36 1px solid;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.observer-target {
+  color: white;
+  background-color: purple;
+  height: 50%;
+  width: 50%;
+}
