@@ -296,3 +296,6 @@ body {
 .list-heading {
   text-align: left;
   color: #1BD5BD; }
+
+.reference {
+  font-size: 0.5em; }
