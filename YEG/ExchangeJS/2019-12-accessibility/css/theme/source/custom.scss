@@ -1,0 +1,59 @@
+// Default mixins and settings inertance -------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap);
+
+// Font Settings
+$mainColor: #FFFFFF;
+$headingColor: #FFFFFF;
+
+// Color settings
+$backgroundColor: #000000;
+
+// Default theme template ----------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+* {
+    font-family: "Source Sans", sans-serif;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+    text-transform: none;
+}
+
+.speech-bubble {
+    background-color: #FFFFFF;
+    color: #000000;
+    border-radius: .4em;
+    padding: 5%;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-right-color: #FFFFFF;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -10px;
+    margin-left: -20px;
+}
+
+.reveal ul {
+    display: block;
+}
+
+.list-heading {
+    text-align: left; 
+    color:#1BD5BD;
+}
