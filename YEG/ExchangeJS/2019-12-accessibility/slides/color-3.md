@@ -1,0 +1,1 @@
+![Contrast Color Picker](img/color-picker.png)

@@ -6,8 +6,8 @@ Introduction <!-- .element: class="list-heading" -->
 
 Best practices and examples in:<!-- .element: class="list-heading" -->
 * Front end design (HTML layout, and theming)
-* Content and asset management (e.g. alt text)
 * Alternate navigation experience (e.g. keyboard only)
+* Content and asset management (e.g. alt text)
 
 What are the avaliable tools?<!-- .element: class="list-heading" -->
 * Metrics? Browser Extensions? Dev Tools?
